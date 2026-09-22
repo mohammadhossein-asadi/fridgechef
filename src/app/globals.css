@@ -1,0 +1,194 @@
+@import url("https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css");
+@import "tailwindcss";
+
+/* Class-based dark mode for next-themes (class applied to <html>). */
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  color-scheme: light;
+  --background: #fdf8f2;
+  --foreground: #2a271d;
+  --muted: #7a7260;
+  --card: #ffffff;
+  --card-2: #fbf6ec;
+  --accent: #f98a1d;
+  --border: rgba(210, 189, 161, 0.45);
+}
+:root.dark {
+  color-scheme: dark;
+  --background: #0d0c09;
+  --foreground: #ece7da;
+  --muted: #9a9484;
+  --card: #17150f;
+  --card-2: #211e16;
+  --accent: #ffa726;
+  --border: rgba(120, 112, 92, 0.35);
+}
+
+@theme {
+  --font-sans: "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
+  --font-display: "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
+
+  --color-cream-50: #fdf8f2;
+  --color-cream-100: #f9efe2;
+  --color-cream-200: #f2e0c8;
+  --color-cream-300: #e7cba2;
+
+  --color-saffron-50: #fff8eb;
+  --color-saffron-100: #ffedcc;
+  --color-saffron-200: #ffd88f;
+  --color-saffron-300: #ffbf4d;
+  --color-saffron-400: #ffa726;
+  --color-saffron-500: #f98a1d;
+  --color-saffron-600: #e56f10;
+  --color-saffron-700: #bd5410;
+  --color-saffron-800: #964216;
+  --color-saffron-900: #7a3715;
+
+  --color-pomegranate-50: #fef3f2;
+  --color-pomegranate-100: #fde2e0;
+  --color-pomegranate-200: #fbc7c2;
+  --color-pomegranate-300: #f79a92;
+  --color-pomegranate-400: #f06053;
+  --color-pomegranate-500: #e23f31;
+  --color-pomegranate-600: #c92a1e;
+  --color-pomegranate-700: #a82015;
+  --color-pomegranate-800: #8a1d15;
+  --color-pomegranate-900: #731c16;
+
+  --color-pistachio-50: #f3f9ec;
+  --color-pistachio-100: #e5f1d4;
+  --color-pistachio-200: #cce2ac;
+  --color-pistachio-300: #aacc78;
+  --color-pistachio-400: #8db94f;
+  --color-pistachio-500: #6f9d35;
+  --color-pistachio-600: #567d27;
+  --color-pistachio-700: #456221;
+  --color-pistachio-800: #3a4f20;
+  --color-pistachio-900: #32431f;
+
+  --color-charcoal-700: #3d3929;
+  --color-charcoal-800: #2a271d;
+  --color-charcoal-900: #1c1a12;
+  --color-charcoal-950: #12110b;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: light;
+}
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  background: linear-gradient(160deg, #fdf8f2 0%, #faf3e7 55%, #f6ecdb 100%);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+html.dark body {
+  background: #0d0c09;
+  background-image: radial-gradient(
+        circle at 15% 10%,
+        rgba(249, 138, 29, 0.06),
+        transparent 45%
+      ),
+      radial-gradient(
+        circle at 85% 80%,
+        rgba(124, 207, 79, 0.05),
+        transparent 45%
+      );
+  background-attachment: fixed;
+}
+
+::selection {
+  background: var(--color-saffron-200);
+  color: var(--color-charcoal-900);
+}
+html.dark ::selection {
+  background: rgba(255, 167, 38, 0.3);
+  color: #f5efe0;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.glass {
+  background: color-mix(in srgb, #fdf8f2 72%, transparent);
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  border: 1px solid color-mix(in srgb, #e7cba2 60%, transparent);
+}
+html.dark .glass {
+  background: color-mix(in srgb, #17150f 70%, transparent);
+  border: 1px solid color-mix(in srgb, #78705c 38%, transparent);
+}
+
+.card-shadow {
+  box-shadow:
+    0 1px 2px rgba(28, 26, 18, 0.05),
+    0 8px 24px -8px rgba(28, 26, 18, 0.12);
+}
+html.dark .card-shadow {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 8px 24px -8px rgba(0, 0, 0, 0.6);
+}
+
+.card-shadow-lg {
+  box-shadow:
+    0 2px 4px rgba(28, 26, 18, 0.06),
+    0 18px 44px -12px rgba(28, 26, 18, 0.2);
+}
+html.dark .card-shadow-lg {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.4),
+    0 18px 44px -12px rgba(0, 0, 0, 0.7);
+}
+
+.persian-numerals {
+  font-variant-numeric: normal;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, #e7cba2 80%, transparent);
+  border-radius: 999px;
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, #78705c 55%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
