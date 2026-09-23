@@ -21,10 +21,16 @@ export interface ChatOptions {
   jsonMode?: boolean;
 }
 
+function getEnv(): Record<string, string | undefined> {
+  // `process` only exists in Node (server-side); client bundles have no env vars.
+  if (typeof process === "undefined") return {};
+  return process.env ?? {};
+}
+
 function buildConfigList(): AiConfig[] {
   const configs: AiConfig[] = [];
 
-  const env = process.env ?? {};
+  const env = getEnv();
 
   const firstNonEmpty = (keys: string[]): string | undefined =>
     keys
