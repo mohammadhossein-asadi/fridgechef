@@ -17,6 +17,8 @@ export interface ChatOptions {
   temperature?: number;
   maxTokens?: number;
   systemPrompt?: string;
+  /** Ask for strict JSON object output where the provider supports it. */
+  jsonMode?: boolean;
 }
 
 function buildConfigList(): AiConfig[] {
@@ -134,7 +136,7 @@ function buildRequest(config: AiConfig, messages: AiMessage[], options: ChatOpti
   const url = config.path
     ? `${config.baseUrl.replace(/\/$/, "")}/${config.path}`
     : `${config.baseUrl}/chat/completions`;
-  const body = JSON.stringify({
+  const body: Record<string, unknown> = {
     model: config.model,
     messages: [
       { role: "system", content: SYSTEM_PROMPT },
@@ -143,8 +145,13 @@ function buildRequest(config: AiConfig, messages: AiMessage[], options: ChatOpti
     temperature: options.temperature ?? 0.7,
     max_tokens: options.maxTokens ?? 2000,
     stream: false,
-  });
-  return { url, body };
+  };
+  // Gemini's OpenAI-compatible endpoint doesn't support response_format; the
+  // system prompt already enforces JSON there.
+  if (options.jsonMode && config.path !== "openaiChat") {
+    body.response_format = { type: "json_object" };
+  }
+  return { url, body: JSON.stringify(body) };
 }
 
 /**

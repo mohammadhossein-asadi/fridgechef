@@ -6,6 +6,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { SPRINGS } from "@/motion/transitions";
 import { useFridgeChef } from "@/lib/store";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 const LINKS = [
   { href: "/", label: "خانه" },
@@ -63,12 +64,13 @@ export function Navbar() {
           })}
         </ul>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           {prefs.currency === "toman" ? null : (
             <span className="hidden text-xs text-charcoal-700/70 md:inline">ریال</span>
           )}
+          <ThemeToggle />
           <button
-            className="grid h-10 w-10 place-items-center rounded-lg hover:bg-cream-100 dark:hover:bg-white/10 lg:hidden"
+            className="grid h-10 w-10 place-items-center rounded-lg text-charcoal-700 hover:bg-cream-100 dark:text-cream-200 dark:hover:bg-white/10 lg:hidden"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-label="باز و بسته کردن منو"

@@ -114,7 +114,7 @@ export const PlannerRequestSchema = z.object({
   region: z.string().nullable().default(null),
   tier: z.enum(["اقتصادی", "متعادل", "منعطف"]).default("متعادل"),
   city: z.string().nullable().default(null),
-  requestedMode: z.enum(["ai", "demo"]).default(null),
+  requestedMode: z.enum(["ai", "demo"]).nullable().default(null),
 });
 
 export type PlannerRequest = z.infer<typeof PlannerRequestSchema>;

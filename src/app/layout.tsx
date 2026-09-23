@@ -23,12 +23,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang="fa"
-      dir="rtl"
-      className="dark"
-      suppressHydrationWarning
-    >
+    <html lang="fa" dir="rtl" suppressHydrationWarning>
       <body className="min-h-screen antialiased">
         <a
           href="#main"

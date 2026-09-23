@@ -57,7 +57,7 @@ export async function generateWeeklyPlan(
           { role: "system", content: buildSystemPrompt() },
           { role: "user", content: buildUserPrompt(req) },
         ],
-        { temperature: 0.7, maxTokens: 8000, output: "json" },
+        { temperature: 0.7, maxTokens: 8000, jsonMode: true },
       );
       const parsed = AiPlanSchema.safeParse(extractJson(response));
       if (parsed.success) {
