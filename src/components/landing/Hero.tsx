@@ -26,7 +26,7 @@ export function Hero() {
           transition={{ duration: reduced ? 0.2 : 0.7, ease: [0, 0, 0.2, 1] }}
         >
           <motion.p
-            className="mb-4 inline-block rounded-full bg-white/60 px-4 py-1.5 text-sm font-bold text-saffron-700 shadow-sm backdrop-blur"
+            className="mb-4 inline-block rounded-full bg-white/60 dark:bg-[var(--card)] px-4 py-1.5 text-sm font-bold text-saffron-700 dark:text-saffron-300 shadow-sm backdrop-blur"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ ...SPRINGS.gentle, delay: 0.15 }}
@@ -34,14 +34,14 @@ export function Hero() {
             مواد غذایی ← برنامه‌ریزی ← غذا
           </motion.p>
 
-          <h1 className="text-balance font-display text-4xl font-black leading-[1.25] text-charcoal-900 md:text-6xl md:leading-[1.2]">
+          <h1 className="text-balance font-display text-4xl font-black leading-[1.25] text-charcoal-900 dark:text-[var(--foreground)] md:text-6xl md:leading-[1.2]">
             این هفته با بودجه‌ات
-            <span className="mx-2 bg-gradient-to-l from-saffron-600 via-pomegranate-500 to-saffron-600 bg-clip-text text-transparent">
+            <span className="mx-2 bg-gradient-to-l from-saffron-600 via-pomegranate-500 to-saffron-600 dark:from-saffron-300 dark:via-pomegranate-300 dark:to-saffron-300 bg-clip-text text-transparent">
               چی بپزی؟
             </span>
           </h1>
 
-          <p className="mx-auto mt-5 max-w-xl text-lg leading-8 text-charcoal-700">
+          <p className="mx-auto mt-5 max-w-xl text-lg leading-8 text-charcoal-700 dark:text-[var(--foreground)]/80">
             بودجه‌ات رو بگو، تعداد نفرات رو مشخص کن؛ برنامه غذایی هفته‌ات و
             لیست خرید بهینه رو بساز. با چیزهایی که از قبل داری، کمتر بخر و
             کمتر دور بریز.
@@ -66,7 +66,7 @@ export function Hero() {
 
             <motion.a
               href="#how"
-              className="rounded-2xl border border-cream-300 bg-white/70 px-6 py-4 font-bold text-charcoal-800 backdrop-blur transition-colors hover:bg-white"
+              className="rounded-2xl border border-cream-300 dark:border-[var(--border)] bg-white/70 dark:bg-[var(--card)] px-6 py-4 font-bold text-charcoal-800 dark:text-[var(--foreground)] backdrop-blur transition-colors hover:bg-white dark:hover:bg-[var(--card-2)]"
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -74,7 +74,7 @@ export function Hero() {
             </motion.a>
           </div>
 
-          <p className="mt-6 text-xs text-charcoal-700/60">
+          <p className="mt-6 text-xs text-charcoal-700/60 dark:text-[var(--muted)]">
             بدون نیاز به کارت بانکی · حالت نمایشی کامل بدون API · ساخته‌شده برای آشپزخانه ایرانی
           </p>
         </motion.div>
@@ -91,8 +91,8 @@ export function Hero() {
             transition={{ y: { repeat: Infinity, duration: 1.8 }, opacity: { delay: 1 } }}
             aria-hidden
           >
-            <div className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-charcoal-700/30 p-1">
-              <div className="h-2 w-1 rounded-full bg-charcoal-700/40" />
+            <div className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-charcoal-700/30 dark:border-[var(--border)] p-1">
+              <div className="h-2 w-1 rounded-full bg-charcoal-700/40 dark:bg-[var(--muted)]" />
             </div>
           </motion.div>
         )}

@@ -32,7 +32,12 @@ export default function RootLayout({
           رفتن به محتوای اصلی
         </a>
         <CursorGlow />
-        <ThemeProvider defaultTheme="dark" storageKey="fridgechef-theme">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          storageKey="fridgechef-theme"
+        >
           {children}
         </ThemeProvider>
       </body>

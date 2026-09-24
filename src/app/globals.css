@@ -180,6 +180,22 @@ input[type="number"] {
 html.dark ::-webkit-scrollbar-thumb {
   background: color-mix(in srgb, #78705c 55%, transparent);
 }
+/* Smooth light<->dark theme transition.
+   next-themes applies the `.dark` class to <html>; this animates the theme-relevant
+   properties so switching fades instead of flashing. Scoped to just the properties
+   that change across themes (not every transitionable property) to avoid slowing
+   unrelated UI. The prefers-reduced-motion block below short-circuits the duration. */
+*,
+*::before,
+*::after {
+  transition:
+    background-color 300ms ease,
+    color 300ms ease,
+    border-color 300ms ease,
+    box-shadow 300ms ease,
+    fill 300ms ease;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

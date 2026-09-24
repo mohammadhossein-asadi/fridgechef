@@ -82,7 +82,7 @@ export function IngredientField({
               animate={{ opacity: 1, scale: 1, y: 0, rotate: 0 }}
               exit={{ opacity: 0, scale: 0.7, y: -8, filter: "blur(4px)" }}
               transition={SPRINGS.snappy}
-              className="flex items-center gap-1.5 rounded-xl border border-cream-200 bg-white px-3 py-1.5 text-sm font-bold shadow-sm"
+              className="flex items-center gap-1.5 rounded-xl border border-cream-200 bg-white px-3 py-1.5 text-sm font-bold shadow-sm dark:border-[var(--border)] dark:bg-[var(--card)] dark:text-[var(--foreground)]"
             >
               <span aria-hidden>{emojiOf(id)}</span>
               {labelOf(id)}
@@ -92,7 +92,7 @@ export function IngredientField({
                   e.stopPropagation();
                   remove(id);
                 }}
-                className="mr-1 grid h-5 w-5 place-items-center rounded-full bg-cream-100 text-xs text-charcoal-700 transition-colors hover:bg-pomegranate-100 hover:text-pomegranate-700"
+                className="mr-1 grid h-5 w-5 place-items-center rounded-full bg-cream-100 text-xs text-charcoal-700 transition-colors hover:bg-pomegranate-100 hover:text-pomegranate-700 dark:bg-[var(--card)] dark:text-[var(--foreground)] dark:hover:bg-pomegranate-900/30 dark:hover:text-pomegranate-300"
                 aria-label={`حذف ${labelOf(id)}`}
               >
                 ✕
@@ -119,7 +119,7 @@ export function IngredientField({
             }
           }}
           placeholder={value.length ? "" : placeholder}
-          className="min-w-40 flex-1 bg-transparent p-1 text-sm outline-none placeholder:text-charcoal-700/40"
+          className="min-w-40 flex-1 bg-transparent p-1 text-sm outline-none placeholder:text-charcoal-700/40 dark:placeholder:text-[var(--muted)]"
           aria-label="افزودن ماده غذایی"
         />
       </div>
@@ -139,11 +139,11 @@ export function IngredientField({
                 <button
                   type="button"
                   onClick={() => add(ing.id)}
-                  className="flex w-full items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-cream-100"
+                  className="flex w-full items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-cream-100 dark:hover:bg-[var(--card-2)]"
                 >
                   <span aria-hidden>{ing.emoji}</span>
                   <span className="font-bold">{ing.fa}</span>
-                  <span className="text-xs text-charcoal-700/50">
+                  <span className="text-xs text-charcoal-700/50 dark:text-[var(--muted)]">
                     {ing.category === "produce" && "میوه و سبزیجات"}
                     {ing.category === "protein" && "گوشت و پروتئین"}
                     {ing.category === "dairy" && "لبنیات"}
@@ -160,7 +160,7 @@ export function IngredientField({
                 <button
                   type="button"
                   onClick={addFree}
-                  className="flex w-full items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-cream-100"
+                  className="flex w-full items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-cream-100 dark:hover:bg-[var(--card-2)]"
                 >
                   <span aria-hidden>➕</span>
                   <span>افزودن «{text.trim()}»</span>
