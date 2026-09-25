@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { CursorGlow } from "@/motion/CursorGlow";
 import { ThemeProvider } from "@/components/ui/ThemeProvider";
+import { SwUpdater } from "@/components/ui/SwUpdater";
 
 export const metadata: Metadata = {
   title: {
@@ -33,6 +34,7 @@ export default function RootLayout({
           رفتن به محتوای اصلی
         </a>
         <CursorGlow />
+        <SwUpdater />
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

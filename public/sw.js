@@ -11,7 +11,7 @@
  *
  * Bump VERSION to invalidate all caches after a deploy.
  */
-const VERSION = "v3";
+const VERSION = "v4";
 const NAV_CACHE = `sofreh-nav-${VERSION}`;
 const STATIC_CACHE = `sofreh-static-${VERSION}`;
 
