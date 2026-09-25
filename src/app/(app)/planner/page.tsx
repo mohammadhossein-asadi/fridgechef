@@ -11,8 +11,9 @@ const GenerationOrbit = dynamic(
   () => import("@/components/3d/GenerationOrbit"),
   { ssr: false },
 );
-import { useFridgeChef, plannerRequestFrom } from "@/lib/store";
-import { parsePersianNumber, formatToman, toPersianDigits } from "@/lib/format";
+import { useSofreh, plannerRequestFrom } from "@/lib/store";
+import { parsePersianNumber, formatCompactToman, toPersianDigits } from "@/lib/format";
+import { MoneyTip } from "@/components/MoneyTip";
 import { MealSlot, MealSlotLabels } from "@/lib/schemas";
 import { REGIONS, CITIES } from "@/lib/ingredients";
 import { SPRINGS } from "@/motion/transitions";
@@ -36,7 +37,7 @@ const TIERS = [
 
 export default function PlannerPage() {
   const router = useRouter();
-  const store = useFridgeChef();
+  const store = useSofreh();
   const [step, setStep] = useState(0);
   const [budgetText, setBudgetText] = useState("4000000");
   const [people, setPeople] = useState(4);
@@ -183,7 +184,7 @@ export default function PlannerPage() {
                 value={store.pantry}
                 onChange={(ids) => {
                   // store expects ids; replace all
-                  useFridgeChef.setState({ pantry: ids });
+                  useSofreh.setState({ pantry: ids });
                 }}
               />
               <p className="mt-3 text-xs text-charcoal-700/50">
@@ -212,7 +213,15 @@ export default function PlannerPage() {
                 </div>
                 <p id="budget-hint" className="mt-2 text-xs text-charcoal-700/60">
                   {budgetToman >= 100_000 ? (
-                    <>معادل {formatToman(budgetToman)} در هفته</>
+                    <>
+                      معادل{" "}
+                      <MoneyTip
+                        value={budgetToman}
+                        display={formatCompactToman(budgetToman)}
+                        toneClass="text-charcoal-700/60"
+                      />{" "}
+                      در هفته
+                    </>
                   ) : (
                     "حداقل ۱۰۰٬۰۰۰ تومان وارد کنید (فارسی یا انگلیسی)"
                   )}
@@ -224,7 +233,7 @@ export default function PlannerPage() {
                       onClick={() => setBudgetText(String(b))}
                       className="rounded-full border border-cream-300 bg-white/70 px-3 py-1 text-xs font-bold transition-colors hover:bg-cream-100"
                     >
-                      {formatToman(b)}
+                      <MoneyTip value={b} display={formatCompactToman(b)} />
                     </button>
                   ))}
                 </div>
@@ -416,7 +425,7 @@ export default function PlannerPage() {
                   {TIERS.map((t) => (
                     <button
                       key={t.key}
-                      onClick={() => useFridgeChef.setState((s) => ({ prefs: { ...s.prefs, tier: t.key } }))}
+                      onClick={() => useSofreh.setState((s) => ({ prefs: { ...s.prefs, tier: t.key } }))}
                       className={`rounded-2xl border-2 p-3 text-right transition-colors ${
                         store.prefs.tier === t.key
                           ? "border-saffron-400 bg-saffron-50"

@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { RecipeCard } from "@/components/recipes/RecipeCard";
-import { useFridgeChef } from "@/lib/store";
+import { useSofreh } from "@/lib/store";
 import { DEMO_RECIPES } from "@/lib/demo";
 import { MealSlotLabels, MealSlot } from "@/lib/schemas";
 import { normalizeFa } from "@/lib/schemas";
@@ -16,7 +16,7 @@ const FILTERS: { key: MealSlot | "all"; label: string }[] = [
 ];
 
 export default function RecipesPage() {
-  const savedRecipes = useFridgeChef((s) => s.savedRecipes);
+  const savedRecipes = useSofreh((s) => s.savedRecipes);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<MealSlot | "all">("all");
 

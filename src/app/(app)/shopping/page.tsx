@@ -3,8 +3,9 @@
 import { useMemo } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
-import { useFridgeChef } from "@/lib/store";
-import { formatToman, toPersianDigits, formatNumber } from "@/lib/format";
+import { useSofreh } from "@/lib/store";
+import { formatCompactToman, toPersianDigits, formatNumber } from "@/lib/format";
+import { MoneyTip } from "@/components/MoneyTip";
 import { formatQuantity } from "@/lib/units";
 import { findIngredient } from "@/lib/ingredients";
 import { MagneticButton } from "@/motion/MagneticButton";
@@ -25,9 +26,9 @@ const CATEGORY_ORDER: ShoppingCategory[] = [
 ];
 
 export default function ShoppingPage() {
-  const plan = useFridgeChef((s) => s.plan);
-  const checked = useFridgeChef((s) => s.shoppingChecked);
-  const toggle = useFridgeChef((s) => s.toggleShoppingItem);
+  const plan = useSofreh((s) => s.plan);
+  const checked = useSofreh((s) => s.shoppingChecked);
+  const toggle = useSofreh((s) => s.toggleShoppingItem);
 
   const grouped = useMemo(() => {
     if (!plan) return [];
@@ -99,7 +100,11 @@ export default function ShoppingPage() {
             {toPersianDigits(checkedCount)} از {toPersianDigits(items.length)} قلم برداشته شد
           </span>
           <span className="font-black text-pistachio-600">
-            {formatToman(grandTotal - checkedTotal)} باقی‌مانده
+            <MoneyTip
+              value={grandTotal - checkedTotal}
+              display={formatCompactToman(grandTotal - checkedTotal)}
+              toneClass="font-black text-pistachio-600"
+            />{" "}باقی‌مانده خرید
           </span>
         </div>
         <div
@@ -117,8 +122,14 @@ export default function ShoppingPage() {
           />
         </div>
         <div className="mt-3 flex justify-between text-xs text-charcoal-700/60">
-          <span>جمع کل تقریبی: {formatToman(grandTotal)}</span>
-          <span>بودجه هفته: {formatToman(plan.budgetToman)}</span>
+          <span>
+            جمع کل تقریبی: {" "}
+            <MoneyTip value={grandTotal} display={formatCompactToman(grandTotal)} toneClass="text-charcoal-700/60" />
+          </span>
+          <span>
+            بودجه هفته: {" "}
+            <MoneyTip value={plan.budgetToman} display={formatCompactToman(plan.budgetToman)} toneClass="text-charcoal-700/60" />
+          </span>
         </div>
       </div>
 
@@ -217,7 +228,7 @@ export default function ShoppingPage() {
                           </span>
                         </span>
                         <span className="text-xs font-bold text-charcoal-700/70">
-                          {formatToman(item.estimatedPriceToman)}
+                          <MoneyTip value={item.estimatedPriceToman} display={formatCompactToman(item.estimatedPriceToman)} toneClass="text-charcoal-700/70" />
                         </span>
                       </motion.button>
                     </motion.li>

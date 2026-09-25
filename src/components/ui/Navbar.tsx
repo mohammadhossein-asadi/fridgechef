@@ -5,8 +5,9 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { SPRINGS } from "@/motion/transitions";
-import { useFridgeChef } from "@/lib/store";
+import { useSofreh } from "@/lib/store";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { PwaIndicator } from "@/components/ui/PwaIndicator";
 
 const LINKS = [
   { href: "/", label: "خانه" },
@@ -21,7 +22,7 @@ const LINKS = [
 export function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const prefs = useFridgeChef((s) => s.prefs);
+  const prefs = useSofreh((s) => s.prefs);
 
   return (
     <header className="glass sticky top-0 z-50 border-b border-cream-200/60 dark:border-white/10">
@@ -35,7 +36,7 @@ export function Navbar() {
           >
             🍲
           </motion.span>
-          <span className="font-display">فریدج‌شف</span>
+          <span className="font-display">سفره</span>
         </Link>
 
         <ul className="hidden items-center gap-1 lg:flex">
@@ -68,6 +69,7 @@ export function Navbar() {
           {prefs.currency === "toman" ? null : (
             <span className="hidden text-xs text-charcoal-700/70 md:inline">ریال</span>
           )}
+          <PwaIndicator />
           <ThemeToggle />
           <button
             className="grid h-10 w-10 place-items-center rounded-lg text-charcoal-700 hover:bg-cream-100 dark:text-cream-200 dark:hover:bg-white/10 lg:hidden"

@@ -1,8 +1,8 @@
-# 🍲 FridgeChef
+# 🍲 Sofreh (سفره)
 
 **Plan a week of food in minutes — Persian meal planning, with or without AI.**
 
-Freebuff (فریباف) is a weekly meal-planning web app. Answer a few questions — how many people, diet preferences, budget, region — and it builds a complete 7-day plan with breakfast, lunch and dinner for every day, plus an automatic shopping list. With an API key, an LLM writes the plan around your preferences; without one, a built-in demo generator fills in from a hand-picked recipe pool, so the app works fully offline.
+Sofreh (سفره) is a weekly meal-planning web app. Answer a few questions — how many people, diet preferences, budget, region — and it builds a complete 7-day plan with breakfast, lunch and dinner for every day, plus an automatic shopping list. With an API key, an LLM writes the plan around your preferences; without one, a built-in demo generator fills in from a hand-picked recipe pool, so the app works fully offline.
 
 The interface is in Persian with full RTL support.
 
@@ -62,10 +62,7 @@ With no keys set, the app runs in **demo mode**: the plan generator uses its bui
 | `npm run build`       | Production build                      |
 | `npm run start`       | Serve the production build            |
 | `npm run lint` / `npm run typecheck` | `tsc --noEmit` type-check |
-| `npm run format`      | Prettier over `src` and `public`      |
 | `npm test`            | Vitest (single run, via Vite)         |
-| `npm run test:watch`  | Vitest watch mode                     |
-| `npm run test:coverage` | Vitest coverage                    |
 
 Requires Node.js 18+.
 
@@ -94,7 +91,7 @@ Key points:
 ## 📁 Project Structure
 
 ```
-freebuff/
+sofreh/
 ├── .env.example                  # AI provider keys (copy to .env.local)
 ├── .prettierrc
 ├── next.config.ts
@@ -103,8 +100,8 @@ freebuff/
 ├── tsconfig.json
 ├── vitest.config.ts
 ├── public/
-│   ├── screenshot.png            # Plan view (used in README)
-│   └── logo.svg
+│   ├── icon.svg                  # App icon (source for PWA icons)
+│   └── screenshot.png            # Plan view (used in README)
 └── src/
     ├── app/
     │   ├── layout.tsx            # Root layout (RTL, Vazirmatn, metadata)

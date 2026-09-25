@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
-import { useFridgeChef } from "@/lib/store";
+import { useSofreh } from "@/lib/store";
 import { RecipeCard } from "@/components/recipes/RecipeCard";
 import { MagneticButton } from "@/motion/MagneticButton";
 
 export default function SavedPage() {
-  const savedRecipes = useFridgeChef((s) => s.savedRecipes);
+  const savedRecipes = useSofreh((s) => s.savedRecipes);
 
   return (
     <div>

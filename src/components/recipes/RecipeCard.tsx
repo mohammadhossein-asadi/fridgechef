@@ -4,18 +4,19 @@ import Link from "next/link";
 import { useRef } from "react";
 import { motion, useInView } from "motion/react";
 import { TiltCard, useTilt } from "@/motion/TiltCard";
-import { useFridgeChef } from "@/lib/store";
-import { formatToman, toPersianDigits } from "@/lib/format";
+import { useSofreh } from "@/lib/store";
+import { formatCompactToman, toPersianDigits } from "@/lib/format";
 import { SPRINGS } from "@/motion/transitions";
+import { MoneyTip } from "@/components/MoneyTip";
 import type { Recipe } from "@/lib/schemas";
 
 export function RecipeCard({ recipe, index = 0 }: { recipe: Recipe; index?: number }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const inView = useInView(cardRef, { once: true, margin: "-40px" });
   const { ref, handlers, style, layerX, layerY } = useTilt(5);
-  const saved = useFridgeChef((s) => s.savedRecipes.some((r) => r.id === recipe.id));
-  const saveRecipe = useFridgeChef((s) => s.saveRecipe);
-  const unsaveRecipe = useFridgeChef((s) => s.unsaveRecipe);
+  const saved = useSofreh((s) => s.savedRecipes.some((r) => r.id === recipe.id));
+  const saveRecipe = useSofreh((s) => s.saveRecipe);
+  const unsaveRecipe = useSofreh((s) => s.unsaveRecipe);
 
   const totalTime = recipe.prepMinutes + recipe.cookMinutes;
 
@@ -67,7 +68,11 @@ export function RecipeCard({ recipe, index = 0 }: { recipe: Recipe; index?: numb
                 </span>
                 <span className="flex flex-col items-end">
                   <span className="font-black text-pistachio-600 dark:text-pistachio-300">
-                    {formatToman(recipe.estimatedCostToman)}
+                    <MoneyTip
+                      value={recipe.estimatedCostToman}
+                      display={formatCompactToman(recipe.estimatedCostToman)}
+                      toneClass="text-pistachio-600 dark:text-pistachio-300"
+                    />
                   </span>
                   <span className="text-[10px] text-charcoal-700/50 dark:text-[var(--muted)]">هزینه تقریبی</span>
                 </span>

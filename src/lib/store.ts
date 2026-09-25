@@ -19,7 +19,7 @@ interface Prefs {
   currency: "toman" | "rial";
 }
 
-interface FridgeChefState {
+interface SofrehState {
   pantry: string[]; // ingredient ids
   prefs: Prefs;
   plan: WeeklyPlan | null;
@@ -39,7 +39,7 @@ interface FridgeChefState {
   isSaved: (id: string) => boolean;
 }
 
-export const useFridgeChef = create<FridgeChefState>()(
+export const useSofreh = create<SofrehState>()(
   persist(
     (set, get) => ({
       pantry: [],
@@ -85,7 +85,7 @@ export const useFridgeChef = create<FridgeChefState>()(
       isSaved: (id) => get().savedRecipes.some((r) => r.id === id),
     }),
     {
-      name: "fridgechef-store",
+      name: "sofreh-store",
       version: 1,
       storage: createJSONStorage(() => localStorage),
       // hydration flag exposed via hook below

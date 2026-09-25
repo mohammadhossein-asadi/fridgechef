@@ -2,14 +2,17 @@
 
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
-import { useFridgeChef } from "@/lib/store";
-import { formatToman, formatNumber, toPersianDigits, formatCompactToman } from "@/lib/format";
+import { useSofreh } from "@/lib/store";
+import { formatNumber, toPersianDigits, formatCompactToman, formatPercent, formatSignedToman, formatToman } from "@/lib/format";
+import { MoneyTip } from "@/components/MoneyTip";
 import { MealSlotLabels, MealSlot } from "@/lib/schemas";
 import { IRANIAN_WEEK_DAYS, toJalali, JALALI_MONTHS, toFaDigits } from "@/lib/dates-helpers";
 import { DEMO_RECIPE_MAP } from "@/lib/demo";
 import { findIngredient } from "@/lib/ingredients";
 import { staggerContainer } from "@/motion/variants";
+import { DURATIONS, EASINGS } from "@/motion/transitions";
 import { MagneticButton } from "@/motion/MagneticButton";
+import { useReducedMotion } from "@/motion/presets";
 import type { Recipe } from "@/lib/schemas";
 
 const SLOT_ORDER: MealSlot[] = ["breakfast", "lunch", "dinner", "snack"];
@@ -21,8 +24,9 @@ const SLOT_ICONS: Record<MealSlot, string> = {
 };
 
 export default function PlanPage() {
-  const plan = useFridgeChef((s) => s.plan);
-  const mode = useFridgeChef((s) => s.planMeta?.mode ?? "demo");
+  const plan = useSofreh((s) => s.plan);
+  const mode = useSofreh((s) => s.planMeta?.mode ?? "demo");
+  const prefersReducedMotion = useReducedMotion();
 
   if (!plan) {
     return (
@@ -50,14 +54,48 @@ export default function PlanPage() {
 
   const totals = plan.totals;
   const overBudget = totals.remainingToman < 0;
+  // Pulse only when over budget (and the user hasn't asked for reduced motion)
+  const pulseOverBudget = overBudget && !prefersReducedMotion;
+
+  const hasBudget = plan.budgetToman > 0;
+  const budgetRatio = hasBudget ? totals.estimatedCostToman / plan.budgetToman : totals.estimatedCostToman > 0 ? 1 : 0;
+  // Budget-proximity: within 15% of budget but still under (overBudget handled separately)
+  const nearBudget = hasBudget && !overBudget && budgetRatio >= 0.85;
+  const meterFill = Math.min(100, Math.round(budgetRatio * 100));
+  const meterTone = overBudget
+    ? "bg-pomegranate-500"
+    : budgetRatio >= 0.85
+      ? "bg-saffron-500"
+      : "bg-pistachio-500";
+  const meterValueText = hasBudget
+    ? overBudget
+      ? `از بودجه ${formatCompactToman(-totals.remainingToman)} بیشتر` 
+      : `${formatPercent(budgetRatio)} بودجه مصرف شده`
+    : totals.estimatedCostToman > 0
+      ? "بدون بودجه مشخص"
+      : "بدون هزینه";
+  const dailyBudgetToman =
+    hasBudget && plan.days.length > 0
+      ? Math.round(plan.budgetToman / plan.days.length)
+      : 0;
+  const dailyToneText = overBudget
+    ? "text-pomegranate-600"
+    : budgetRatio >= 0.85
+      ? "text-saffron-600"
+      : "text-pistachio-700";
 
   return (
     <div>
-      <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+      <div className="mb-4 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-3xl font-black">برنامه هفتگی</h1>
           <p className="mt-1 text-sm text-charcoal-700">
-            {toPersianDigits(plan.people)} نفره · بودجه {formatToman(plan.budgetToman)}
+            {toPersianDigits(plan.people)} نفره · بودجه{" "}
+            <MoneyTip
+              value={plan.budgetToman}
+              display={formatCompactToman(plan.budgetToman)}
+              toneClass="text-charcoal-700"
+            />
             {mode === "demo" && (
               <span className="mr-2 rounded-full bg-cream-200 px-2 py-0.5 text-xs font-bold">
                 حالت نمایشی
@@ -81,28 +119,111 @@ export default function PlanPage() {
         </div>
       </div>
 
+      {/* Budget meter */}
+      <motion.div
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: DURATIONS.base, ease: EASINGS.decelerate }}
+        className="mb-8"
+      >
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-2 text-xs font-bold">
+          <span className="text-charcoal-700/60">
+            {hasBudget ? `مصرف بودجه ${formatPercent(budgetRatio)}` : "بدون بودجه مشخص"}
+          </span>
+          {hasBudget ? (
+            <span className={overBudget ? "text-pomegranate-600" : "text-pistachio-700"}>
+              باقی‌مانده{" "}
+              <MoneyTip
+                value={totals.remainingToman}
+                display={formatSignedToman(totals.remainingToman)}
+                signed
+                toneClass={overBudget ? "text-pomegranate-600" : "text-pistachio-700"}
+              />
+            </span>
+          ) : (
+            <MoneyTip
+              value={totals.estimatedCostToman}
+              display={formatCompactToman(totals.estimatedCostToman)}
+              toneClass={overBudget ? "text-pomegranate-600" : "text-pistachio-700"}
+            />
+          )}
+        </div>
+        <motion.div
+          role="progressbar"
+          aria-label="مصرف بودجه"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={meterFill}
+          aria-valuetext={meterValueText}
+          animate={pulseOverBudget ? { opacity: [1, 0.65, 1] } : { opacity: 1 }}
+          transition={{
+            duration: DURATIONS.slow * 3,
+            ease: EASINGS.standard,
+            repeat: pulseOverBudget ? Infinity : 0,
+          }}
+          className="glass h-3 overflow-hidden rounded-full card-shadow"
+        >
+          <motion.div
+            className={`h-full rounded-full ${meterTone}`}
+            initial={{ width: "0%" }}
+            animate={{ width: `${meterFill}%` }}
+            transition={{ duration: DURATIONS.slow, ease: EASINGS.decelerate }}
+          />
+        </motion.div>
+        {hasBudget && (
+          <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs">
+            <span className="font-bold text-charcoal-700/60">هزینه روزانه از بودجه روزانه</span>              <span className={`font-extrabold ${dailyToneText}`}>
+                <MoneyTip
+                  value={totals.perDayToman}
+                  display={formatCompactToman(totals.perDayToman)}
+                  toneClass={`font-extrabold ${dailyToneText}`}
+                />
+                <span className="font-medium text-charcoal-700/60">
+                  {" "}از{" "}
+                  <MoneyTip
+                    value={dailyBudgetToman}
+                    display={formatCompactToman(dailyBudgetToman)}
+                    toneClass="text-charcoal-700/60"
+                  />
+                </span>
+              </span>
+          </div>
+        )}
+      </motion.div>
+
       {/* Budget summary cards */}
       <motion.div
         className="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
         variants={staggerContainer(0.07)}
         initial="hidden"
         animate="show"
-      >
-        <StatCard
-          label="هزینه تقریبی کل"
-          value={formatToman(totals.estimatedCostToman)}
-          tone="neutral"
-        />
-        <StatCard
-          label="باقی‌مانده بودجه"
-          value={formatToman(Math.abs(totals.remainingToman))}
-          tone={overBudget ? "danger" : "good"}
-          suffix={overBudget ? "بیش از بودجه" : undefined}
-        />
-        <StatCard label="هزینه هر نفر" value={formatToman(totals.perPersonToman)} tone="neutral" />
-        <StatCard label="هزینه روزانه" value={formatToman(totals.perDayToman)} tone="neutral" />
+      >            <StatCard
+              label="هزینه تقریبی کل"
+              value={totals.estimatedCostToman}
+              tone="neutral"
+            />            <StatCard
+              label="باقی‌مانده بودجه"
+              value={totals.remainingToman}
+              tone={overBudget ? "danger" : "good"}
+              signed
+              suffix={overBudget ? "بیش از بودجه" : undefined}
+            />              <StatCard label="هزینه هر نفر" value={totals.perPersonToman} tone="neutral" />              <StatCard label="هزینه روزانه" value={totals.perDayToman} tone="neutral" />
       </motion.div>
 
+      {nearBudget && (
+        <motion.p
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 rounded-xl bg-saffron-50 px-4 py-3 text-sm font-bold text-saffron-700"
+          role="status"
+        >
+          هزینه تقریبی تقریباً به بودجه‌ی{" "}
+          <MoneyTip value={plan.budgetToman} display={formatCompactToman(plan.budgetToman)} />{" "}
+          می‌رسد ({" "}
+          <MoneyTip value={totals.estimatedCostToman} display={formatCompactToman(totals.estimatedCostToman)} />)
+          {" "}— سطح بودجه را «اقتصادی» انتخاب کنید یا وعده‌های میان‌وعده را حذف کنید.
+        </motion.p>
+      )}
       {overBudget && (
         <motion.p
           initial={{ opacity: 0, y: -8 }}
@@ -202,11 +323,15 @@ function StatCard({
   label,
   value,
   tone,
+  full,
+  signed,
   suffix,
 }: {
   label: string;
-  value: string;
+  value: number;
   tone: "good" | "danger" | "neutral";
+  full?: boolean;
+  signed?: boolean;
   suffix?: string;
 }) {
   const toneClass =
@@ -224,7 +349,18 @@ function StatCard({
       className="glass rounded-2xl p-5 card-shadow"
     >
       <p className="mb-1 text-xs font-bold text-charcoal-700/60">{label}</p>
-      <p className={`text-xl font-black ${toneClass}`}>{value}</p>
+      <p className={`text-xl font-black ${toneClass}`}>
+        {full ? (
+          signed ? formatSignedToman(value) : formatToman(value)
+        ) : (
+          <MoneyTip
+            value={value}
+            display={signed ? formatSignedToman(value) : formatCompactToman(value)}
+            signed={signed}
+            toneClass={toneClass}
+          />
+        )}
+      </p>
       {suffix && <p className="mt-1 text-[11px] font-bold text-pomegranate-500">{suffix}</p>}
     </motion.div>
   );

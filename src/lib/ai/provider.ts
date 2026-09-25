@@ -180,8 +180,8 @@ export async function chatCompletion(
 
   for (const config of configs) {
     if (config.provider === "OpenRouter") {
-      headers["HTTP-Referer"] = "https://fridgechef.local";
-      headers["X-Title"] = "FridgeChef";
+      headers["HTTP-Referer"] = "https://sofreh.local";
+      headers["X-Title"] = "Sofreh";
     }
 
     try {

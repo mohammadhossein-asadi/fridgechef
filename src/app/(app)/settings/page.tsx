@@ -2,15 +2,14 @@
 
 import { useState } from "react";
 import { motion } from "motion/react";
-import { useFridgeChef } from "@/lib/store";
-import { formatToman, formatNumber, toPersianDigits } from "@/lib/format";
+import { useSofreh } from "@/lib/store";
+import { formatCompactToman, formatNumber, tomanToRial } from "@/lib/format";
+import { MoneyTip } from "@/components/MoneyTip";
 import { CITIES, REGIONS } from "@/lib/ingredients";
-import { tomanToRial, formatToman as fmtT } from "@/lib/format";
 
 export default function SettingsPage() {
-  const prefs = useFridgeChef((s) => s.prefs);
-  const setPrefs = useFridgeChef((s) => s.setPrefs);
-  const clearPlan = useFridgeChef((s) => s.clearPlan);
+  const prefs = useSofreh((s) => s.prefs);
+  const setPrefs = useSofreh((s) => s.setPrefs);
   const [confirmClear, setConfirmClear] = useState(false);
 
   return (
@@ -44,9 +43,14 @@ export default function SettingsPage() {
               >
                 <span className="block text-lg font-black">{opt.label}</span>
                 <span className="mt-1 block text-xs text-charcoal-700/60">
-                  {opt.key === "toman"
-                    ? formatToman(opt.example)
-                    : `${formatNumber(tomanToRial(opt.example))} ریال`}
+                  {opt.key === "toman" ? (
+                    <MoneyTip
+                      value={opt.example}
+                      display={formatCompactToman(opt.example)}
+                    />
+                  ) : (
+                    `${formatNumber(tomanToRial(opt.example))} ریال`
+                  )}
                 </span>
               </button>
             ))}
@@ -122,7 +126,7 @@ export default function SettingsPage() {
             >
               <button
                 onClick={() => {
-                  useFridgeChef.persist.clearStorage();
+                  useSofreh.persist.clearStorage();
                   window.location.reload();
                 }}
                 className="rounded-xl bg-pomegranate-600 px-5 py-3 text-sm font-extrabold text-white"

@@ -4,11 +4,12 @@ import { use, useMemo, useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { motion } from "motion/react";
-import { useFridgeChef } from "@/lib/store";
+import { useSofreh } from "@/lib/store";
 import { DEMO_RECIPE_MAP } from "@/lib/demo";
 import { findIngredient } from "@/lib/ingredients";
-import { formatToman, toPersianDigits } from "@/lib/format";
+import { formatCompactToman, toPersianDigits } from "@/lib/format";
 import { formatQuantity } from "@/lib/units";
+import { MoneyTip } from "@/components/MoneyTip";
 import { MagneticButton } from "@/motion/MagneticButton";
 import { Reveal } from "@/motion/Reveal";
 import type { Recipe } from "@/lib/schemas";
@@ -28,14 +29,14 @@ export default function RecipeDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const savedRecipes = useFridgeChef((s) => s.savedRecipes);
+  const savedRecipes = useSofreh((s) => s.savedRecipes);
   const recipe: Recipe | undefined =
     DEMO_RECIPE_MAP[id] ?? savedRecipes.find((r) => r.id === id);
 
-  const pantry = useFridgeChef((s) => s.pantry);
-  const saved = useFridgeChef((s) => s.savedRecipes.some((r) => r.id === id));
-  const saveRecipe = useFridgeChef((s) => s.saveRecipe);
-  const unsaveRecipe = useFridgeChef((s) => s.unsaveRecipe);
+  const pantry = useSofreh((s) => s.pantry);
+  const saved = useSofreh((s) => s.savedRecipes.some((r) => r.id === id));
+  const saveRecipe = useSofreh((s) => s.saveRecipe);
+  const unsaveRecipe = useSofreh((s) => s.unsaveRecipe);
   const [show3D, setShow3D] = useState(false);
 
   const { have, buy } = useMemo(() => {
@@ -176,7 +177,11 @@ export default function RecipeDetailPage({
             <div className="mt-5 flex items-center justify-between border-t border-cream-200 pt-4">
               <span className="text-sm font-bold">هزینه تقریبی</span>
               <span className="text-lg font-black text-pistachio-600">
-                {formatToman(recipe.estimatedCostToman)}
+                <MoneyTip
+                  value={recipe.estimatedCostToman}
+                  display={formatCompactToman(recipe.estimatedCostToman)}
+                  toneClass="text-pistachio-600"
+                />
               </span>
             </div>
             <p className="mt-1 text-left text-[10px] text-charcoal-700/50">

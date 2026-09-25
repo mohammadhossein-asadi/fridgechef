@@ -4,7 +4,7 @@ export function Footer() {
   return (
     <footer className="border-t border-cream-200/60 py-10 text-center text-sm text-charcoal-700/80">
       <p className="mb-2 font-bold text-charcoal-800">
-        فریدج‌شف — دستیار غذای هوشمند ایرانی
+        سفره — دستیار غذای هوشمند ایرانی
       </p>
       <p className="mb-4">
         با چیزهایی که از قبل داری، کمتر بخر و کمتر دور بریز.

@@ -26,10 +26,11 @@ export function parsePersianNumber(input: string): number | null {
 
 /** Format integer with Persian digits + Persian thousands separator */
 export function formatNumber(value: number): string {
-  const s = Math.round(value)
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, "٬");
-  return toPersianDigits(s);
+  const rounded = Math.round(value);
+  if (rounded < 0) return `−${formatNumber(-rounded)}`;
+  return toPersianDigits(
+    rounded.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "٬")
+  );
 }
 
 /** Format money stored in Toman */
@@ -37,8 +38,16 @@ export function formatToman(value: number, withCurrency = true): string {
   return `${formatNumber(value)}${withCurrency ? " تومان" : ""}`;
 }
 
+/** Signed money for budget deltas: +۲٬۵۰۰٬۰۰۰ تومان / −۱٬۵۰۰ تومان / ۰ تومان */
+export function formatSignedToman(value: number): string {
+  if (value > 0) return `+${formatToman(value)}`;
+  if (value < 0) return `−${formatToman(-value)}`;
+  return formatToman(0);
+}
+
 /** Compact money: ۲٫۵ میلیون تومان — for big numbers in tight UI */
 export function formatCompactToman(value: number): string {
+  if (value < 0) return `−${formatCompactToman(-value)}`;
   if (value >= 1_000_000) {
     const m = value / 1_000_000;
     const text = Number.isInteger(m) ? String(m) : m.toFixed(1);
@@ -46,6 +55,7 @@ export function formatCompactToman(value: number): string {
   }
   if (value >= 1000) {
     const k = Math.round(value / 1000);
+    if (k >= 1000) return "۱ میلیون تومان"; // ۹۹۹٬۵۰۰+ rounds up to a full million
     return `${formatNumber(k)} هزار تومان`;
   }
   return formatToman(value);

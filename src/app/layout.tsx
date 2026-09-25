@@ -5,12 +5,13 @@ import { ThemeProvider } from "@/components/ui/ThemeProvider";
 
 export const metadata: Metadata = {
   title: {
-    default: "فریدج‌شف — برنامه‌ریز هوشمند غذای هفتگی",
-    template: "%s | فریدج‌شف",
+    default: "سفره — برنامه‌ریز هوشمند غذای هفتگی",
+    template: "%s | سفره",
   },
   description:
     "بودجه‌ات رو بگو، تعداد نفرات رو مشخص کن؛ برنامه غذایی هفته‌ات و لیست خرید بهینه رو بساز. کمتر بخر، کمتر دور بریز.",
-  applicationName: "FridgeChef",
+  applicationName: "Sofreh",
+  icons: [{ url: "/icon.svg", type: "image/svg+xml" }],
 };
 
 export const viewport: Viewport = {
@@ -36,7 +37,7 @@ export default function RootLayout({
           attribute="class"
           defaultTheme="dark"
           enableSystem
-          storageKey="fridgechef-theme"
+          storageKey="sofreh-theme"
         >
           {children}
         </ThemeProvider>

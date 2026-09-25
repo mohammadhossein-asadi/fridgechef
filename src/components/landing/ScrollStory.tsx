@@ -6,7 +6,8 @@ import { motion, useScroll, useTransform, useInView } from "motion/react";
 import { Reveal, StaggerContainer, StaggerItem } from "@/motion/Reveal";
 import { MagneticButton } from "@/motion/MagneticButton";
 import { useReducedMotion } from "@/motion/presets";
-import { formatToman } from "@/lib/format";
+import { formatCompactToman } from "@/lib/format";
+import { MoneyTip } from "@/components/MoneyTip";
 import { ingredientEmoji, ingredientFa } from "@/lib/ingredients";
 
 function Section({
@@ -228,8 +229,8 @@ function SectionRecipes() {
               </motion.div>
               <h3 className="mb-1 text-lg font-extrabold text-charcoal-900">{c.name}</h3>
               <p className="mb-3 text-sm text-charcoal-700/70">{c.time}</p>
-              <p className="text-sm font-bold text-pistachio-600">
-                {formatToman(c.cost)}
+              <p className="text-sm font-bold">
+                <MoneyTip value={c.cost} display={formatCompactToman(c.cost)} toneClass="text-pistachio-600" />
               </p>
               <p className="mt-2 text-xs text-charcoal-700/60">هزینه تقریبی</p>
             </motion.article>
@@ -248,6 +249,7 @@ function SectionShopping() {
     { name: "ماست", emoji: "🍶", qty: "۱ عدد", price: 70000 },
     { name: "سبزی", emoji: "🌿", qty: "۱ دسته", price: 40000 },
   ];
+  const total = items.reduce((s, i) => s + i.price, 0);
 
   return (
     <Section>
@@ -282,14 +284,18 @@ function SectionShopping() {
                         <span className="block text-xs text-charcoal-700/60">{item.qty}</span>
                       </span>
                     </span>
-                    <span className="text-sm text-charcoal-700/80">{formatToman(item.price)}</span>
+                    <span className="text-sm">
+                      <MoneyTip value={item.price} display={formatCompactToman(item.price)} toneClass="text-charcoal-700/80" />
+                    </span>
                   </motion.div>
                 </StaggerItem>
               ))}
             </StaggerContainer>
             <div className="mt-5 flex justify-between border-t border-cream-200 pt-4 text-sm font-extrabold">
               <span>جمع تقریبی</span>
-              <span>{formatToman(items.reduce((s, i) => s + i.price, 0))}</span>
+              <span>
+                <MoneyTip value={total} display={formatCompactToman(total)} />
+              </span>
             </div>
           </motion.div>
         </Reveal>
